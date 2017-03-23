@@ -6,6 +6,10 @@ import { HomePage } from '../pages/home/home';
 import { LoginPage } from '../pages/login/login';
 import { HttpService } from '../services/httpService';
 
+export function httpFactory(backend: XHRBackend, defaultOptions: RequestOptions, app: App) {
+  return new HttpService(backend, defaultOptions, app);
+}
+
 @NgModule({
   declarations: [
     MyApp,
@@ -24,13 +28,7 @@ import { HttpService } from '../services/httpService';
   ],
   providers: [
     { provide: ErrorHandler, useClass: IonicErrorHandler },
-    {
-      provide: HttpService,
-      useFactory: (backend: XHRBackend, defaultOptions: RequestOptions, app: App) => {
-         return new HttpService(backend, defaultOptions, app);
-      },
-      deps: [XHRBackend, RequestOptions, App]
-    }
+    { provide: HttpService, useFactory: httpFactory, deps: [XHRBackend, RequestOptions, App] }
   ]
 })
 export class AppModule {}
